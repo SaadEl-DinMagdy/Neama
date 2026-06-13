@@ -1,4 +1,4 @@
-#region Configration Service
+﻿#region Configration Service
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -45,7 +45,35 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "أدخل كلمة Bearer وبعدها مسافة ثم التوكن الخاص بك. \r\n\r\nمثال: 'Bearer eyJhbGci...'"
+    });
+
+    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                },
+                Name = "Bearer",
+                In = Microsoft.OpenApi.Models.ParameterLocation.Header
+            },
+            new List<string>()
+        }
+    });
+});
 
 builder.Services.AddDbContext<StoreContext>(option =>
 {
@@ -142,26 +170,33 @@ var Response = new ApiValidationErrorResponse()
 
 return new BadRequestObjectResult(Response);
 };
-}); 
+});
 #endregion
 #endregion
 
 #region Configure Kestrel middleware
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()   
+              .AllowAnyMethod()   
+              .AllowAnyHeader();  
+    });
+});
 var app = builder.Build();
+app.UseCors("AllowAll");
 
 app.UseMiddleware<ExceptionMiddleware>();
 
 
-if (app.Environment.IsDevelopment())
-{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
 
 app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
@@ -190,4 +225,5 @@ catch (Exception ex)
 }
 #endregion
 
+app.UseDeveloperExceptionPage();
 app.Run();

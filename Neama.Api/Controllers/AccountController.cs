@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Neama.Api.Dtos;
 using Neama.Api.Errors;
@@ -7,6 +8,7 @@ using Shared.Dtos;
 
 namespace Neama.Api.Controllers
 {
+    [AllowAnonymous]
     public class AccountController : BaseApiController
     {
         private readonly IAuthenticationService _auth;

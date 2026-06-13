@@ -62,6 +62,12 @@ namespace Neama.Api.Controllers
             return Ok("تم تحديث حالة الطلب إلى 'تم التواصل' بنجاح." );
         }
 
+        [HttpGet("AllUser")]
+        public async Task<ActionResult<IReadOnlyList<UserInfoDto>>> GetAllUser()
+        {
+            var Data = await _admindashboard.GetAllUserAsync();
+            return Ok(Data);
+        }
         [HttpPost("mainsection")]
         public async Task<ActionResult> Add([FromForm] AddMainSectionDto model)
         {

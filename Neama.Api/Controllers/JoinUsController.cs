@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Neama.Api.Errors;
 using Neama.Core.Services.Contract;
@@ -6,7 +7,7 @@ using Shared.Dtos;
 
 namespace Neama.Api.Controllers
 {
-
+    [AllowAnonymous]
     public class JoinUsController : BaseApiController
     {
         private readonly IApplicationToJoinService _appservice;

@@ -108,5 +108,20 @@ namespace Neama.Service.AdminDashboard
             _unitOfWork.Repository<Partner>().Update(partner);
             return await _unitOfWork.CompleteAsync() > 0;
         }
+
+        public async Task<IReadOnlyList<UserInfoDto>> GetAllUserAsync()
+        {
+            var Users = await _userManager.GetUsersInRoleAsync(AppRoles.User);
+
+            IReadOnlyList<UserInfoDto> Result = Users
+                .Where(U => U.EmailConfirmed)
+                .Select(U => new UserInfoDto
+                {
+                    DisplayName = U.DisplayName,
+                    Email = U.Email
+                }).ToList();
+
+            return Result;
+        }
     }
 }
