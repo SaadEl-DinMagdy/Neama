@@ -211,10 +211,10 @@ try
 {
     await _Dbcontext.Database.MigrateAsync();
     var _UserManger = Services.GetRequiredService<UserManager<AppUser>>();
-    var roleManager = Services.GetRequiredService<RoleManager<IdentityRole>>(); 
-
+    var roleManager = Services.GetRequiredService<RoleManager<IdentityRole>>();
+    var _configuration = Services.GetRequiredService<IConfiguration>();
     await StoreContextSeed.SeedRolesAsync(roleManager);
-    await StoreContextSeed.SeedAdminUserAsync(_UserManger);
+    await StoreContextSeed.SeedAdminUserAsync(_UserManger, _configuration);
     await StoreContextSeed.SeedDeliveryMethodsAsync(_Dbcontext);
 
 }
