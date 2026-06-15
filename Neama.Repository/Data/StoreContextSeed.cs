@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Neama.Core.Entities;
 using Neama.Core.Entities.Order_Aggregate;
 using System;
@@ -25,7 +26,7 @@ namespace Neama.Repository.Data
             if (!await roleManager.RoleExistsAsync("User"))
                 await roleManager.CreateAsync(new IdentityRole("User"));
         }
-        public static async Task SeedAdminUserAsync(UserManager<AppUser> userManager)
+        public static async Task SeedAdminUserAsync(UserManager<AppUser> userManager , IConfiguration configuration)
         {
             if (!userManager.Users.Any(u => u.Email == "saadeldin.magdy1@gmail.com"))
             {
@@ -37,7 +38,7 @@ namespace Neama.Repository.Data
                     EmailConfirmed = true 
                 };
 
-                var result = await userManager.CreateAsync(adminUser, "Admin@123");
+                var result = await userManager.CreateAsync(adminUser, configuration["AdminSettings:Password"]);
 
                 if (result.Succeeded)
                 {
