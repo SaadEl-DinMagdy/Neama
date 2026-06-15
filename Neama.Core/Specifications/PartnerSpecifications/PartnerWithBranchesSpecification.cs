@@ -10,7 +10,7 @@ namespace Neama.Core.Specifications.PartnerSpecifications
     public class PartnerWithBranchesSpecification : BaseSpecifications<Partner>
     {
         public PartnerWithBranchesSpecification(int id) 
-            :base(P =>  P.Id == id)
+            :base(P => P.Is_Active&& P.Id == id)
         {
             Includes.Add(P => P.MainSection);
             Includes.Add(P => P.Manager);
@@ -18,7 +18,7 @@ namespace Neama.Core.Specifications.PartnerSpecifications
         }
 
         public PartnerWithBranchesSpecification(string? search)
-           : base(P =>  (string.IsNullOrEmpty(search) || P.Name.ToLower().Contains(search)))
+           : base(P => P.Is_Active && (string.IsNullOrEmpty(search) || P.Name.ToLower().Contains(search)))
         {
             Includes.Add(P => P.MainSection);
             Includes.Add(P => P.Manager);

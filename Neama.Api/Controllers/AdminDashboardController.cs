@@ -182,18 +182,6 @@ namespace Neama.Api.Controllers
             return Ok("تم إيقاف التاجر وجميع فروعه بنجاح.");
         }
 
-        [HttpPost("Activepartner/{id}")]
-        public async Task<ActionResult> ActivePartner(int id)
-        {
-            var result = await _partnerService.ActivePartner(id);
-
-            if (!result)
-                return NotFound(new ApiResponse(404, "التاجر غير موجود أو حدث خطأ أثناء التعديل."));
-
-            return Ok("تم تنشيط التاجر وجميع فروعه بنجاح.");
-        }
-
-
         [HttpPut("{partnerId}/settle")]
         public async Task<ActionResult> SettlePartnerAccount(int partnerId)
         {

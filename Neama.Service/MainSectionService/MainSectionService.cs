@@ -64,14 +64,10 @@ namespace Neama.Service.MainSectionService
             {
                 return false;
             }
-            
-            if(section.IconURL != null)
-            {
-                var iconUrl = await _attachment.ImageUrl(section.IconURL);
-                await _attachment.DeleteImageByUrl(new List<string>() { data.IconURL });
+            var iconUrl = await _attachment.ImageUrl(section.IconURL);
+            await _attachment.DeleteImageByUrl(new List<string>() { data.IconURL });
 
-                data.IconURL = iconUrl;
-            }
+            data.IconURL = iconUrl;
             data.Name = section.Name;
 
             
@@ -84,9 +80,9 @@ namespace Neama.Service.MainSectionService
         {
             var data = await _unitOfWork.Repository<MainSection>().GetAsync(id);
 
-
+            data.IsActive=false;
            
-            _unitOfWork.Repository<MainSection>().Delete(data);
+            _unitOfWork.Repository<MainSection>().Update(data);
             var result = await _unitOfWork.CompleteAsync();
 
             return result > 0;
