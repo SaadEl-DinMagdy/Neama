@@ -31,7 +31,8 @@ namespace Neama.Service.AdminDashboard
             var report = new DashboardReportDto();
 
             var users = await _userManager.GetUsersInRoleAsync(AppRoles.User);
-            report.TotalUsers = users.Count;
+            IReadOnlyList<AppUser> e =  users.Where(u => u.EmailConfirmed).Select(u => new AppUser()).ToList();
+            report.TotalUsers = e.Count;
 
             var partners = await _unitOfWork.Repository<Partner>().GetAllAsync();
             report.TotalPartners = partners.Count;

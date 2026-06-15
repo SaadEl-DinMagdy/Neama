@@ -10,8 +10,7 @@ namespace Shared.Dtos
 {
     public class UserProductDto
     {
-        [Required]
-        public List<IFormFile> Photos { get; set; } = new List<IFormFile>();
+        public List<IFormFile>? Photos { get; set; } = new List<IFormFile>();
         [Required]
         public int Id { get; set; }
         [Required]
