@@ -94,5 +94,12 @@ namespace Neama.Api.Controllers
             var reports = await _partnerDashboardService.GetPartnerReportsAsync(partnerId.Value, filter, year);
             return Ok(reports);
         }
+        [HttpGet("profitgrowth")]
+        public async Task<ActionResult<YearlyGrowthReportDto>> GetProfitGrowth([FromQuery] int year = 2026)
+        {
+            var partnerId = await GetCurrentPartnerIdAsync();
+            var result = await _partnerDashboardService.GetProfitGrowthAsync(partnerId.Value, year);
+            return Ok(result);
+        }
     }
 }

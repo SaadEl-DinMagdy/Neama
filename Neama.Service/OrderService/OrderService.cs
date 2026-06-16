@@ -45,7 +45,7 @@ namespace Neama.Service.OrderService
 
             var branchId = Basket.Items[0].BranchId;
             var branch = await _unitOfWork.Repository<Branch>().GetAsync(branchId);
-            if (branch == null) return OrderResult.Failure("الفرع غير موجود");
+            if (branch == null || branch.Is_Active==false) return OrderResult.Failure("الفرع غير موجود");
 
             var partner = await _unitOfWork.Repository<Partner>().GetAsync(branch.PartnerId ?? 0);
 

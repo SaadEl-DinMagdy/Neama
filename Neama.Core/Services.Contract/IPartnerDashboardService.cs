@@ -18,5 +18,6 @@ namespace Neama.Core.Services.Contract
         Task<IReadOnlyList<AllBranchResponseDto>> GetAllBranchesAsync(int partnerId);
         Task<BranchDetailsDto?> GetBranchDetailsAsync(int branchId, int partnerId, ReportTimeFilter filter, int? year);
         Task<PartnerReportDto> GetPartnerReportsAsync(int partnerId, ReportTimeFilter filter, int? year);
+        Task<YearlyGrowthReportDto> GetProfitGrowthAsync(int partnerid, int year);
     }
 }
