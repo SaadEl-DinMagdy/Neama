@@ -13,6 +13,7 @@ namespace Neama.Core.Entities
         public int MealsSaved { get; set; }
         public decimal SavedMoney { get; set; }
 
+        public DateTimeOffset? CreatedAt { get; set; } = DateTimeOffset.UtcNow;
         public ICollection<Address> Addresses { get; set; } = new HashSet<Address>();
         public Partner? Partner { get; set; }
         public Charity? Charity { get; set; }

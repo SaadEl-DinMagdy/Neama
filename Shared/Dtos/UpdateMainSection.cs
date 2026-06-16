@@ -14,7 +14,6 @@ namespace Shared.Dtos
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
-        [Required]
-        public IFormFile IconURL { get; set; }
+        public IFormFile? IconURL { get; set; }
     }
 }

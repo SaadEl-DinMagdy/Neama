@@ -10,7 +10,7 @@ namespace Neama.Core.Specifications.OrderSpecifications
 {
     public class OrdersForReportSpecification : BaseSpecifications<Order>
     {
-        public OrdersForReportSpecification(ReportTimeFilter filter, int? specificYear = null)
+        public OrdersForReportSpecification(ReportTimeFilter? filter, int? specificYear = null)
         {
             Includes.Add(o => o.Items);
             var now = DateTimeOffset.UtcNow;

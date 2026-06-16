@@ -120,9 +120,26 @@ namespace Neama.Service.PartnerService
             return result > 0;
         }
 
-        public Task<Partner> UpdatePartner()
+        public async Task<bool> UpdatePartner(int id)
         {
-            throw new NotImplementedException();
+            var spec = new PartnerWithBranchesSpecification(id);
+            var partner = await _unitOfWork.Repository<Partner>().GetWithSpecAsync(spec);
+
+            if (partner == null)
+            {
+                return false;
+            }
+
+            partner.Is_Active = true;
+            foreach (var branch in partner.Branches)
+            {
+                branch.Is_Active = true;
+            }
+
+            _unitOfWork.Repository<Partner>().Update(partner);
+            var result = await _unitOfWork.CompleteAsync();
+
+            return result > 0;
         }
     }
 }
