@@ -20,5 +20,9 @@ namespace Neama.Core.Services.Contract
         Task<DashboardReportDto> GetDashboardReportsAsync(ReportTimeFilter filter, int? specificYear = null);
 
         Task<bool> SettlePartnerAccountAsync(int partnerId);
+
+        Task<YearlyGrowthReportDto> GetUsersGrowthAsync(int year);
+        Task<YearlyGrowthReportDto> GetProfitGrowthAsync(int year);
+        Task<YearlyGrowthReportDto> GetItemsbuyGrowthAsync(int year);
     }
 }

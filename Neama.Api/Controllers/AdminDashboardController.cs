@@ -182,6 +182,16 @@ namespace Neama.Api.Controllers
             return Ok("تم إيقاف التاجر وجميع فروعه بنجاح.");
         }
 
+        [HttpPost("Activepartner/{id}")]
+        public async Task<ActionResult> Activepartner(int id)
+        {
+            var result = await _partnerService.UpdatePartner(id);
+
+            if (!result)
+                return NotFound(new ApiResponse(404, "التاجر غير موجود أو حدث خطأ أثناء التعطيل"));
+
+            return Ok("تم تنشيط التاجر وجميع فروعه بنجاح.");
+        }
         [HttpPut("{partnerId}/settle")]
         public async Task<ActionResult> SettlePartnerAccount(int partnerId)
         {
@@ -191,6 +201,27 @@ namespace Neama.Api.Controllers
                 return BadRequest(new ApiResponse(400, "حدث خطأ أثناء تسوية الحساب، قد يكون الشريك غير موجود."));
 
             return Ok(new ApiResponse(200, "تمت تسوية حساب الشريك وتصفير المحفظة بنجاح."));
+        }
+
+        [HttpGet("usersgrowth")]
+        public async Task<ActionResult<YearlyGrowthReportDto>> GetUsersGrowth([FromQuery] int year = 2026)
+        {
+            var result = await _admindashboard.GetUsersGrowthAsync(year);
+            return Ok(result);
+        }
+
+        [HttpGet("itemsgrowth")]
+        public async Task<ActionResult<YearlyGrowthReportDto>> GetItemsGrowth([FromQuery] int year = 2026)
+        {
+            var result = await _admindashboard.GetItemsbuyGrowthAsync(year);
+            return Ok(result);
+        }
+
+        [HttpGet("profitgrowth")]
+        public async Task<ActionResult<YearlyGrowthReportDto>> GetProfitGrowth([FromQuery] int year = 2026)
+        {
+            var result = await _admindashboard.GetProfitGrowthAsync(year);
+            return Ok(result);
         }
     }
 }
