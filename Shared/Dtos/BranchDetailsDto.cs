@@ -13,6 +13,10 @@ namespace Shared.Dtos
         public string BranchPhone { get; set; }
         public bool Is_Active { get; set; }
         public string? Email { get; set; }
+        public TimeOnly OpeningTime { get; set; }
+        public TimeOnly ClosingTime { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
 
         public int SoldItems { get; set; }
         public decimal BranchSales { get; set; }

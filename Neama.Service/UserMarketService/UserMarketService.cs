@@ -126,19 +126,26 @@ namespace Neama.Service.UserMarketService
             {
                 return null;
             }
-            await _attachment.DeleteImageByUrl(product.Photos);
             List<string> images = new List<string>();
-            foreach (var image in userProduct.Photos)
+
+            if (userProduct.Photos.Count > 0)
             {
-                var d = await _attachment.ImageUrl(image);
-                if (d == null)
+                await _attachment.DeleteImageByUrl(product.Photos);
+                
+                foreach (var image in userProduct.Photos)
                 {
-                    return null;
+                    var d = await _attachment.ImageUrl(image);
+                    if (d == null)
+                    {
+                        return null;
+                    }
+                    images.Add(d);
                 }
-                images.Add(d);
+
+                product.Photos = images;
             }
+
            
-            product.Photos = images;
             product.Name = userProduct.Name;
             product.Discription = userProduct.Discription;
             product.Country = userProduct.Country;

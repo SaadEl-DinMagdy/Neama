@@ -49,7 +49,7 @@ namespace Neama.Core.Specifications.OrderSpecifications
                 }
             }
         }
-        public OrdersForReportSpecification(ReportTimeFilter filter, int? partnerId = null, int? branchId = null, int? specificYear = null)
+        public OrdersForReportSpecification(ReportTimeFilter? filter, int? partnerId = null, int? branchId = null, int? specificYear = null)
         {
             Includes.Add(o => o.Items);
 

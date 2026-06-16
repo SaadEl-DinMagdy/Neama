@@ -164,7 +164,7 @@ namespace Neama.Service.AdminDashboard
                 {
                     Month = g.Key,
 
-                    Count = (int)g.Sum(order => order.SubTotal)
+                    Count = (int)(g.Sum(order => order.SubTotal) * 0.10m)
                 })
                 .ToList();
             var report = new YearlyGrowthReportDto
