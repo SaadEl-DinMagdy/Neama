@@ -223,6 +223,74 @@ namespace Neama.Service.BranchDashboardService
                 DisplayedItemsCount = activeItemsCount
             };
         }
-        
+
+        public async Task<YearlyGrowthReportDto> GetProfitGrowthAsync(int branshid, int year)
+        {
+            var spec = new OrdersForReportSpecification(null, branchId: branshid, specificYear: year);
+            var orders = await _unitOfWork.Repository<Order>().GetAllWithSpecAsync(spec);
+
+            var ItembuyGrowthList = orders
+                .Where(u => u.OrderDate.Year == year)
+                .GroupBy(u => u.OrderDate.Month)
+                .Select(g => new
+                {
+                    Month = g.Key,
+
+                    Count = (int)(g.Sum(order => order.SubTotal) * 0.90m)
+                })
+                .ToList();
+            var report = new YearlyGrowthReportDto
+            {
+                Jan = ItembuyGrowthList.FirstOrDefault(x => x.Month == 1)?.Count ?? 0,
+                Feb = ItembuyGrowthList.FirstOrDefault(x => x.Month == 2)?.Count ?? 0,
+                Mar = ItembuyGrowthList.FirstOrDefault(x => x.Month == 3)?.Count ?? 0,
+                Apr = ItembuyGrowthList.FirstOrDefault(x => x.Month == 4)?.Count ?? 0,
+                May = ItembuyGrowthList.FirstOrDefault(x => x.Month == 5)?.Count ?? 0,
+                Jun = ItembuyGrowthList.FirstOrDefault(x => x.Month == 6)?.Count ?? 0,
+                Jul = ItembuyGrowthList.FirstOrDefault(x => x.Month == 7)?.Count ?? 0,
+                Aug = ItembuyGrowthList.FirstOrDefault(x => x.Month == 8)?.Count ?? 0,
+                Sep = ItembuyGrowthList.FirstOrDefault(x => x.Month == 9)?.Count ?? 0,
+                Oct = ItembuyGrowthList.FirstOrDefault(x => x.Month == 10)?.Count ?? 0,
+                Nov = ItembuyGrowthList.FirstOrDefault(x => x.Month == 11)?.Count ?? 0,
+                Dec = ItembuyGrowthList.FirstOrDefault(x => x.Month == 12)?.Count ?? 0
+            };
+
+            return report;
+        }
+
+        public async Task<YearlyGrowthReportDto> GetItemsbuyGrowthAsync(int branshid, int year)
+        {
+            var spec = new OrdersForReportSpecification(null, branchId: branshid, specificYear: year);
+            var orders = await _unitOfWork.Repository<Order>().GetAllWithSpecAsync(spec);
+
+            var ItembuyGrowthList = orders
+                .Where(u => u.OrderDate.Year == year)
+                .GroupBy(u => u.OrderDate.Month)
+                .Select(g => new
+                {
+                    Month = g.Key,
+
+                    Count = g.Sum(order => order.Items.Sum(item => item.Quantity))
+                })
+                .ToList();
+            var report = new YearlyGrowthReportDto
+            {
+                Jan = ItembuyGrowthList.FirstOrDefault(x => x.Month == 1)?.Count ?? 0,
+                Feb = ItembuyGrowthList.FirstOrDefault(x => x.Month == 2)?.Count ?? 0,
+                Mar = ItembuyGrowthList.FirstOrDefault(x => x.Month == 3)?.Count ?? 0,
+                Apr = ItembuyGrowthList.FirstOrDefault(x => x.Month == 4)?.Count ?? 0,
+                May = ItembuyGrowthList.FirstOrDefault(x => x.Month == 5)?.Count ?? 0,
+                Jun = ItembuyGrowthList.FirstOrDefault(x => x.Month == 6)?.Count ?? 0,
+                Jul = ItembuyGrowthList.FirstOrDefault(x => x.Month == 7)?.Count ?? 0,
+                Aug = ItembuyGrowthList.FirstOrDefault(x => x.Month == 8)?.Count ?? 0,
+                Sep = ItembuyGrowthList.FirstOrDefault(x => x.Month == 9)?.Count ?? 0,
+                Oct = ItembuyGrowthList.FirstOrDefault(x => x.Month == 10)?.Count ?? 0,
+                Nov = ItembuyGrowthList.FirstOrDefault(x => x.Month == 11)?.Count ?? 0,
+                Dec = ItembuyGrowthList.FirstOrDefault(x => x.Month == 12)?.Count ?? 0
+            };
+
+            return report;
+        }
+
     }
 }

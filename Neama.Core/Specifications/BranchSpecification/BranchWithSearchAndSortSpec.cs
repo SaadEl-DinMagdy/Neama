@@ -19,7 +19,7 @@ namespace Neama.Core.Specifications.BranchSpecification
                 ((string.IsNullOrEmpty(SpecParams.Search) || B.BranchName.ToLower().Contains(SpecParams.Search)) &&
                  B.Is_Active && B.Partner.MainSectionId == SpecParams.MainSectionId
                  &&B.Location != null &&
-                B.Location.Distance(LocationHelper.GetUserPoint(SpecParams.Longitude,SpecParams.Latitude))<=SpecParams.DistanceKiloMeter*1000
+                B.Location.Distance(LocationHelper.GetUserPoint(SpecParams.Longitude, SpecParams.Latitude)) <= (SpecParams.DistanceKiloMeter * 1000)
                  ) 
             )
         {

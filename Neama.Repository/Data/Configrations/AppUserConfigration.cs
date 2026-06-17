@@ -15,7 +15,7 @@ namespace Neama.Repository.Data.Configrations
         {
             builder.Property(u => u.DisplayName)
             .IsRequired()
-            .HasMaxLength(25);
+            .HasMaxLength(50);
 
             builder.Property(u => u.MealsSaved)
                 .IsRequired()

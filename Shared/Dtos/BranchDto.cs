@@ -11,7 +11,7 @@ namespace Shared.Dtos
         public int Id { get; set; }
         public string BranchName { get; set; }
         public decimal AverageRating { get; set; }
-        public double distance { get; set; }
+        public int ReviewCount { get; set; }
         public TimeOnly OpeningTime { get; set; }
         public TimeOnly ClosingTime { get; set; }
         public double Latitude { get; set; }
