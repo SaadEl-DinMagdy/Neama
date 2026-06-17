@@ -36,6 +36,7 @@ namespace Neama.Service.ItemService
                     DiscountPrice = I.DiscountPrice,
                     Discount = I.DiscountPrice*100/I.OriginalPrice,
                     StockQuantity = I.StockQuantity,
+                    Discription = I.Description
                 }).ToList();
 
             return Result;
@@ -60,7 +61,8 @@ namespace Neama.Service.ItemService
                 DiscountPrice = Item.DiscountPrice,
                 Discount = Item.DiscountPrice * 100 / Item.OriginalPrice,
                 StockQuantity = Item.StockQuantity,
-                BranchId = Item.BranchId
+                BranchId = Item.BranchId,
+                Description = Item.Description
 
             };
         }

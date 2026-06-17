@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Neama.Api.Errors;
 using Neama.Core.Entities.Order_Aggregate;
 using Neama.Core.Services.Contract;
+using Neama.Service.PartnerDashboardService;
 using Shared;
 using Shared.Dtos;
 using Shared.shareEnumsAndEntitys;
@@ -158,6 +159,20 @@ namespace Neama.Api.Controllers
 
             var report = await _dashboardService.GetBranchReportAsync(branchId.Value, filter);
             return Ok(report);
+        }
+        [HttpGet("profitgrowth")]
+        public async Task<ActionResult<YearlyGrowthReportDto>> GetProfitGrowth([FromQuery] int year = 2026)
+        {
+            var branchid = await GetCurrentBranchIdAsync();
+            var result = await _dashboardService.GetProfitGrowthAsync(branchid.Value, year);
+            return Ok(result);
+        }
+        [HttpGet("itemsgrowth")]
+        public async Task<ActionResult<YearlyGrowthReportDto>> GetItemsGrowth([FromQuery] int year = 2026)
+        {
+            var branchid = await GetCurrentBranchIdAsync();
+            var result = await _dashboardService.GetItemsbuyGrowthAsync(branchid.Value, year);
+            return Ok(result);
         }
     }
 }

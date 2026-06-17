@@ -3,6 +3,7 @@ using Neama.Core.Entities;
 using Neama.Core.Services.Contract;
 using Neama.Core.Specifications;
 using Neama.Core.Specifications.BranchSpecification;
+using NetTopologySuite.Operation.Distance;
 using Shared.Dtos;
 using System;
 using System.Collections.Generic;
@@ -35,8 +36,8 @@ namespace Neama.Service.BranchService
                     AverageRating = B.AverageRating,
                     OpeningTime = B.OpeningTime,
                     ClosingTime = B.ClosingTime,
-                    distance = B.Location.Distance(userlocation) /1000,
-                    ItemavilableCount =   B.Items.Sum( i=> i.StockQuantity),
+                    distance = Math.Round(B.Location.Distance(userlocation) * 111.32, 2),
+                    ItemavilableCount =B.Items.Sum( i=> i.StockQuantity),
                     Cover_URL = B.Partner.Cover_URL,
                     Logo_URL = B.Partner.Logo_URL
 
@@ -57,15 +58,14 @@ namespace Neama.Service.BranchService
             {
                 return null;
             }
-            var userlocation = LocationHelper.GetUserPoint(Branch.Longitude, Branch.Latitude);
             return new BranchDto()
             {
                 Id = Branch.Id,
                 BranchName = Branch.BranchName,
                 AverageRating = Branch.AverageRating,
+                ReviewCount = Branch.ReviewCount,
                 OpeningTime = Branch.OpeningTime,
                 ClosingTime = Branch.ClosingTime,
-                distance = Branch.Location.Distance(userlocation) / 1000,
                 Cover_URL = Branch.Partner.Cover_URL,
                 Logo_URL = Branch.Partner.Logo_URL,
                 Longitude = Branch.Longitude,

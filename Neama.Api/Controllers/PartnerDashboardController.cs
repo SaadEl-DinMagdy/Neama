@@ -29,6 +29,17 @@ namespace Neama.Api.Controllers
             return partner?.Id;
         }
 
+        [HttpGet("info")]
+        public async Task<ActionResult> GetInfo()
+        {
+            var partnerId = await GetCurrentPartnerIdAsync();
+
+            var result = await _partnerDashboardService.GetPartnerDetilsAsync(partnerId.Value);
+            if (result== null) return NotFound(new ApiResponse(404));
+
+            return Ok(result);
+        }
+
         [HttpPost("branch")]
         public async Task<ActionResult> AddBranch(AddBranchDto model)
         {
@@ -99,6 +110,13 @@ namespace Neama.Api.Controllers
         {
             var partnerId = await GetCurrentPartnerIdAsync();
             var result = await _partnerDashboardService.GetProfitGrowthAsync(partnerId.Value, year);
+            return Ok(result);
+        }
+        [HttpGet("itemsgrowth")]
+        public async Task<ActionResult<YearlyGrowthReportDto>> GetItemsGrowth([FromQuery] int year = 2026)
+        {
+            var partnerId = await GetCurrentPartnerIdAsync();
+            var result = await _partnerDashboardService.GetItemsbuyGrowthAsync(partnerId.Value, year);
             return Ok(result);
         }
     }

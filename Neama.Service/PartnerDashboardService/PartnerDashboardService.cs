@@ -6,6 +6,7 @@ using Neama.Core.Services.Contract;
 using Neama.Core.Specifications;
 using Neama.Core.Specifications.BranchSpecification;
 using Neama.Core.Specifications.OrderSpecifications;
+using Neama.Core.Specifications.PartnerSpecifications;
 using Shared;
 using Shared.Dtos;
 using Shared.shareEnumsAndEntitys;
@@ -226,6 +227,66 @@ namespace Neama.Service.PartnerDashboardService
             };
 
             return report;
+        }
+
+        public async Task<YearlyGrowthReportDto> GetItemsbuyGrowthAsync(int partnerid,int year)
+        {
+            var spec = new OrdersForReportSpecification(null, partnerId: partnerid, specificYear: year);
+            var orders = await _unitOfWork.Repository<Order>().GetAllWithSpecAsync(spec);
+
+            var ItembuyGrowthList = orders
+                .Where(u => u.OrderDate.Year == year)
+                .GroupBy(u => u.OrderDate.Month)
+                .Select(g => new
+                {
+                    Month = g.Key,
+
+                    Count = g.Sum(order => order.Items.Sum(item => item.Quantity))
+                })
+                .ToList();
+            var report = new YearlyGrowthReportDto
+            {
+                Jan = ItembuyGrowthList.FirstOrDefault(x => x.Month == 1)?.Count ?? 0,
+                Feb = ItembuyGrowthList.FirstOrDefault(x => x.Month == 2)?.Count ?? 0,
+                Mar = ItembuyGrowthList.FirstOrDefault(x => x.Month == 3)?.Count ?? 0,
+                Apr = ItembuyGrowthList.FirstOrDefault(x => x.Month == 4)?.Count ?? 0,
+                May = ItembuyGrowthList.FirstOrDefault(x => x.Month == 5)?.Count ?? 0,
+                Jun = ItembuyGrowthList.FirstOrDefault(x => x.Month == 6)?.Count ?? 0,
+                Jul = ItembuyGrowthList.FirstOrDefault(x => x.Month == 7)?.Count ?? 0,
+                Aug = ItembuyGrowthList.FirstOrDefault(x => x.Month == 8)?.Count ?? 0,
+                Sep = ItembuyGrowthList.FirstOrDefault(x => x.Month == 9)?.Count ?? 0,
+                Oct = ItembuyGrowthList.FirstOrDefault(x => x.Month == 10)?.Count ?? 0,
+                Nov = ItembuyGrowthList.FirstOrDefault(x => x.Month == 11)?.Count ?? 0,
+                Dec = ItembuyGrowthList.FirstOrDefault(x => x.Month == 12)?.Count ?? 0
+            };
+
+            return report;
+        }
+
+        public async Task<PartnerResponseDto?> GetPartnerDetilsAsync(int partnerId)
+        {
+            var spec =  new PartnerWithBranchesSpecification(partnerId);
+            var data = await _unitOfWork.Repository<Partner>().GetAllWithSpecAsync(spec);
+
+            if (data.Count == 0)
+            {
+                return null;
+            }
+
+            var result = new PartnerResponseDto
+            {
+                Id = data[0].Id,
+                Name = data[0].Name,
+                WalledBalance = data[0].WalledBalance,
+                Is_Active = data[0].Is_Active,
+                Logo_URL = data[0].Logo_URL,
+                Cover_URL = data[0].Cover_URL,
+                CreationDate = data[0].CreationDate,
+                ManagerEmail = data[0].Manager != null ? data[0].Manager.Email : null,
+                MainSectionName = data[0].MainSection != null ? data[0].MainSection.Name : null
+            };
+
+            return result;
         }
     }
 }

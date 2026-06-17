@@ -15,9 +15,11 @@ namespace Neama.Core.Services.Contract
         Task<bool> AddBranchAsync(int partnerId, AddBranchDto model);
         Task<bool> RemoveBranchAsync(int branchId, int partnerId);
         Task<bool> UpdatePartnerAsync(int partnerId, UpdatePartnerDto model);
+        Task<PartnerResponseDto?> GetPartnerDetilsAsync(int partnerId);
         Task<IReadOnlyList<AllBranchResponseDto>> GetAllBranchesAsync(int partnerId);
         Task<BranchDetailsDto?> GetBranchDetailsAsync(int branchId, int partnerId, ReportTimeFilter filter, int? year);
         Task<PartnerReportDto> GetPartnerReportsAsync(int partnerId, ReportTimeFilter filter, int? year);
         Task<YearlyGrowthReportDto> GetProfitGrowthAsync(int partnerid, int year);
+        Task<YearlyGrowthReportDto> GetItemsbuyGrowthAsync(int partnerid, int year);
     }
 }

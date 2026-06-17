@@ -28,5 +28,7 @@ namespace Neama.Core.Services.Contract
         Task<bool> ChangeOrderStatusAsync(int orderId, OrderStatus newStatus);
 
         Task<BranchReportDto> GetBranchReportAsync(int branchId, ReportTimeFilter timeFilter);
+        Task<YearlyGrowthReportDto> GetProfitGrowthAsync(int branchid, int year);
+        Task<YearlyGrowthReportDto> GetItemsbuyGrowthAsync(int branchid, int year);
     }
 }
