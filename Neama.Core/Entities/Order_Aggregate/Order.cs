@@ -11,7 +11,7 @@ namespace Neama.Core.Entities.Order_Aggregate
     {
         public Order() { }
 
-        public Order(int branchId, int partnerId,string buyerEmail, Shared.shareEnumsAndEntitys.ShippingAddress shippingAddress, DeliveryMethod deliveryMethod, ICollection<OrderItem> items, decimal subTotal, PaymentMethodType paymentMethod, string? paymentIntenId = null)
+        public Order(int branchId, int partnerId,string buyerEmail, Shared.shareEnumsAndEntitys.ShippingAddress? shippingAddress, DeliveryMethod deliveryMethod, ICollection<OrderItem> items, decimal subTotal, PaymentMethodType paymentMethod, string? paymentIntenId = null)
         {
             BranchId = branchId;
             PartnerId = partnerId;
@@ -27,7 +27,7 @@ namespace Neama.Core.Entities.Order_Aggregate
         public int PartnerId { get; set; }
         public string BuyerEmail { get; set; }
         public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.UtcNow;
-        public Shared.shareEnumsAndEntitys.ShippingAddress ShippingAddress { get; set; }
+        public Shared.shareEnumsAndEntitys.ShippingAddress? ShippingAddress { get; set; }
         public OrderStatus Status { get; set; } = OrderStatus.Pending;
         public DeliveryMethod? DeliveryMethod { get; set; }
         public ICollection<OrderItem> Items { get; set; } = new HashSet<OrderItem>();

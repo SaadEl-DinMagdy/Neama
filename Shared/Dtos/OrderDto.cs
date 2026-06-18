@@ -17,7 +17,7 @@ namespace Shared.Dtos
         [Required]
         public int DeliveryMethodId { get; set; }
 
-        public AddressDto ShippingAddress { get; set; }
+        public AddressDto? ShippingAddress { get; set; }
 
 
         [Required]
