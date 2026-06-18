@@ -201,7 +201,7 @@ namespace Neama.Service.PartnerDashboardService
             var orders = await _unitOfWork.Repository<Order>().GetAllWithSpecAsync(spec);
 
             var ItembuyGrowthList = orders
-                .Where(u => u.OrderDate.Year == year)
+                .Where(u => u.OrderDate.Year == year&& u.PartnerId == partnerid)
                 .GroupBy(u => u.OrderDate.Month)
                 .Select(g => new
                 {
@@ -235,7 +235,7 @@ namespace Neama.Service.PartnerDashboardService
             var orders = await _unitOfWork.Repository<Order>().GetAllWithSpecAsync(spec);
 
             var ItembuyGrowthList = orders
-                .Where(u => u.OrderDate.Year == year)
+                .Where(u => u.OrderDate.Year == year && u.PartnerId == partnerid)
                 .GroupBy(u => u.OrderDate.Month)
                 .Select(g => new
                 {
