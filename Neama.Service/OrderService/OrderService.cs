@@ -31,7 +31,7 @@ namespace Neama.Service.OrderService
             _locationService = locationService;
         }
 
-        public async Task<object> CreateOrderAsync(string buyerEmail, string basketId, int deliveryMethodId, AddressDto address, PaymentMethodType paymentMethod)
+        public async Task<object> CreateOrderAsync(string buyerEmail, string basketId, int deliveryMethodId, AddressDto? address, PaymentMethodType paymentMethod)
         {
 
             var Basket = await _basketRepository.GetAsync(basketId);
@@ -49,10 +49,13 @@ namespace Neama.Service.OrderService
 
             var partner = await _unitOfWork.Repository<Partner>().GetAsync(branch.PartnerId ?? 0);
 
-
-            var userLocation = LocationHelper.GetUserPoint(address.Longitude, address.Latitude);
-            if (branch.Location.Distance(userLocation) > 5000)
-                return OrderResult.Failure("عنوان التوصيل لا يقع فى حدود التوصيل اقصى مسافه 5 كيلو متر من الفرع");
+            if (deliveryMethodId == 1)
+            {
+                if(address == null) return OrderResult.Failure("يجب ادخال عنوان التوصيل");
+                var userLocation = LocationHelper.GetUserPoint(address.Longitude, address.Latitude);
+                if (branch.Location.Distance(userLocation) > 5000)
+                    return OrderResult.Failure("عنوان التوصيل لا يقع فى حدود التوصيل اقصى مسافه 5 كيلو متر من الفرع");
+            }
 
 
             foreach (var item in Basket.Items)
@@ -74,10 +77,12 @@ namespace Neama.Service.OrderService
             var SubTotal = orderItems.Sum(O => O.Quantity * O.Price);
             var DeliveryMethod = await _unitOfWork.Repository<DeliveryMethod>().GetAsync(deliveryMethodId);
             var pickupCode = new Random().Next(100000, 999999).ToString();
-
-            var location = await _locationService.GetAddressAsync(address.Latitude, address.Longitude);
-            var shippingAddress = new ShippingAddress(address.Name, address.PhoneNumber,address.Longitude, address.Latitude, address.DistinctiveMark, location.Street, location.City, location.Governorate, location.DisplayName);
-
+            ShippingAddress? shippingAddress = null;
+            if (deliveryMethodId == 1)
+            {
+                var location = await _locationService.GetAddressAsync(address.Latitude, address.Longitude);
+                shippingAddress = new ShippingAddress(address.Name, address.PhoneNumber, address.Longitude, address.Latitude, address.DistinctiveMark, location.Street, location.City, location.Governorate, location.DisplayName);
+            }
             var intentId = paymentMethod == PaymentMethodType.Card ? Basket?.PaymentIntentId : null;
 
             var order = new Order(branchId, partner.Id,buyerEmail, shippingAddress, DeliveryMethod, orderItems, SubTotal, paymentMethod, intentId)

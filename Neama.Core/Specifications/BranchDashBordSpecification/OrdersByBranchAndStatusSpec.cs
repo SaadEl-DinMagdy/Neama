@@ -13,6 +13,7 @@ namespace Neama.Core.Specifications.BranchDashBordSpecification
             : base(o => o.BranchId == branchId && (!status.HasValue || o.Status == status))
         {
             Includes.Add(o => o.Items);
+            Includes.Add(o => o.DeliveryMethod);    
             AddOrderByDesc(o => o.OrderDate);
         }
     }

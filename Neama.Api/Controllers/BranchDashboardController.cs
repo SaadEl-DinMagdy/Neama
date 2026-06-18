@@ -16,10 +16,13 @@ namespace Neama.Api.Controllers
     public class BranchDashboardController : BaseApiController
     {
         private readonly IBranchDashboardService _dashboardService;
+        private readonly IBranchService _branchService;
+        private readonly IOrderService _orderService;
 
-        public BranchDashboardController(IBranchDashboardService dashboardService)
+        public BranchDashboardController(IBranchDashboardService dashboardService , IBranchService branchService )
         {
             _dashboardService = dashboardService;
+            _branchService = branchService;
         }
 
         private async Task<int?> GetCurrentBranchIdAsync()
@@ -30,6 +33,16 @@ namespace Neama.Api.Controllers
             return await _dashboardService.GetBranchIdByManagerAsync(managerId);
         }
 
+        [HttpGet("info")]
+        public async Task<ActionResult<BranchDto>> GetInfo()
+        {
+            var branchId = await GetCurrentBranchIdAsync();
+            if (branchId == null)
+                return Unauthorized(new ApiResponse(401, "عفواً، حسابك غير مسجل كمدير لأي فرع."));
+
+           var result = await _branchService.GetAsync(branchId.Value);
+            return Ok(result);
+        }
         [HttpGet("items")]
         public async Task<ActionResult<IReadOnlyList<ItemDashbordDto>>> GetItems(string? searchName)
         {
@@ -128,7 +141,7 @@ namespace Neama.Api.Controllers
                 : NotFound(new ApiResponse(404, "القسم غير موجود"));
         }
 
-
+        
         [HttpGet("orders")]
         public async Task<ActionResult> GetOrders([FromQuery] OrderStatus? status)
         {

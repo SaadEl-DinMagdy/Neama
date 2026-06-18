@@ -17,6 +17,6 @@ namespace Shared.Dtos
         [Required]public int StockQuantity { get; set; }
         public DateOnly? ExpiryDate { get; set; } 
         public int CategoryId { get; set; }
-        public IFormFile? Image { get; set; }
+        public IFormFile Image { get; set; }
     }
 }
