@@ -143,7 +143,7 @@ namespace Neama.Api.Controllers
 
         
         [HttpGet("orders")]
-        public async Task<ActionResult> GetOrders([FromQuery] OrderStatus? status)
+        public async Task<ActionResult<IReadOnlyList<Order>>> GetOrders([FromQuery] OrderStatus? status)
         {
             var branchId = await GetCurrentBranchIdAsync();
             if (branchId == null)

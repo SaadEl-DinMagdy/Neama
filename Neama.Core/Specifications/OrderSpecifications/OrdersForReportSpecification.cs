@@ -52,13 +52,8 @@ namespace Neama.Core.Specifications.OrderSpecifications
         public OrdersForReportSpecification(ReportTimeFilter? filter, int? partnerId = null, int? branchId = null, int? specificYear = null)
         {
             Includes.Add(o => o.Items);
-
-            if (partnerId.HasValue)
-                Criteria = (o => o.PartnerId == partnerId.Value);
-
-            if (branchId.HasValue)
-                Criteria = (o => o.BranchId == branchId.Value);
-
+            Criteria = (o => (!partnerId.HasValue || o.PartnerId == partnerId.Value) &&
+                            (!branchId.HasValue || o.BranchId == branchId.Value));
 
             var now = DateTimeOffset.UtcNow;
 
@@ -66,7 +61,8 @@ namespace Neama.Core.Specifications.OrderSpecifications
             {
                 var startOfYear = new DateTimeOffset(specificYear.Value, 1, 1, 0, 0, 0, TimeSpan.Zero);
                 var endOfYear = startOfYear.AddYears(1);
-                Criteria = (o => o.OrderDate >= startOfYear && o.OrderDate < endOfYear);
+                Criteria = (o => (!partnerId.HasValue || o.PartnerId == partnerId.Value) &&
+                             (!branchId.HasValue || o.BranchId == branchId.Value) && o.OrderDate >= startOfYear && o.OrderDate < endOfYear);
             }
             else
             {
@@ -75,17 +71,20 @@ namespace Neama.Core.Specifications.OrderSpecifications
                     case ReportTimeFilter.Today:
                         var startOfDay = now.Date;
                         var endOfDay = startOfDay.AddDays(1);
-                        Criteria = (o => o.OrderDate >= startOfDay && o.OrderDate < endOfDay);
+                        Criteria = (o => (!partnerId.HasValue || o.PartnerId == partnerId.Value) &&
+                                    (!branchId.HasValue || o.BranchId == branchId.Value) && o.OrderDate >= startOfDay && o.OrderDate < endOfDay);
                         break;
                     case ReportTimeFilter.ThisMonth:
                         var startOfMonth = new DateTimeOffset(now.Year, now.Month, 1, 0, 0, 0, now.Offset);
                         var endOfMonth = startOfMonth.AddMonths(1);
-                        Criteria = (o => o.OrderDate >= startOfMonth && o.OrderDate < endOfMonth);
+                        Criteria = (o => (!partnerId.HasValue || o.PartnerId == partnerId.Value) &&
+                                         (!branchId.HasValue || o.BranchId == branchId.Value) && o.OrderDate >= startOfMonth && o.OrderDate < endOfMonth);
                         break;
                     case ReportTimeFilter.ThisYear:
                         var startOfThisYear = new DateTimeOffset(now.Year, 1, 1, 0, 0, 0, now.Offset);
                         var endOfThisYear = startOfThisYear.AddYears(1);
-                        Criteria = (o => o.OrderDate >= startOfThisYear && o.OrderDate < endOfThisYear);
+                        Criteria = (o => (!partnerId.HasValue || o.PartnerId == partnerId.Value) &&
+                                   (!branchId.HasValue || o.BranchId == branchId.Value) && o.OrderDate >= startOfThisYear && o.OrderDate < endOfThisYear);
                         break;
                 }
             }
