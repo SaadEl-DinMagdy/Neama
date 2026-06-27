@@ -177,21 +177,25 @@ return new BadRequestObjectResult(Response);
 #region Configure Kestrel middleware
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("AllowVercelFrontEnd", policy =>
     {
-        policy.AllowAnyOrigin()   
-              .AllowAnyMethod()   
-              .AllowAnyHeader();  
+        policy.WithOrigins("https://neama1.vercel.app")
+              .AllowAnyMethod()
+              .AllowAnyHeader();
     });
 });
 var app = builder.Build();
-app.UseCors("AllowAll");
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+app.UseCors("AllowVercelFrontEnd");
 
 app.UseMiddleware<ExceptionMiddleware>();
 
 
-    app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
@@ -225,5 +229,5 @@ catch (Exception ex)
 }
 #endregion
 
-app.UseDeveloperExceptionPage();
+
 app.Run();
